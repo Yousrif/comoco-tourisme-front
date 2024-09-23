@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { animateScroll as scroll } from 'react-scroll';
 import { Link } from 'react-router-dom';
 import { Button } from './Button';
 import './NavBar.css';
 function NavBar() {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
+  const [scrolling, setScrolling] = useState(false);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -17,16 +19,27 @@ function NavBar() {
     }
   };
 
+  const handleScroll = () => {
+    if (window.scrollY > 550) {
+      setScrolling(true);
+    } else {
+      setScrolling(false);
+    }
+  };
+
   useEffect(() => {
     showButton();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <>
-      <nav className="navbar">
+      <nav className={scrolling ? 'navbar-scroll' : 'navbar'}>
         <div className="navbar-container"></div>
         <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-          COMOCO <i className="fab fa-typo3" />
+          COMOCO <img src="./images/images.png" alt="" />
+          {/* <i className="fab fa-typo3" /> */}
         </Link>
         <div className="menu-icon" onClick={handleClick}>
           <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
@@ -46,13 +59,22 @@ function NavBar() {
               Services
             </Link>
           </li>
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <Link
               to="/products"
               className="nav-links"
               onClick={closeMobileMenu}
             >
               Product
+            </Link>
+          </li> */}
+          <li className="nav-item">
+            <Link
+              to="/allsites"
+              className="nav-links"
+              onClick={closeMobileMenu}
+            >
+              All sites
             </Link>
           </li>
           <li className="nav-item">
